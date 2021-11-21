@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lobo.projetoRacerSpring.domain.Administrador;
 import com.lobo.projetoRacerSpring.domain.enums.Perfil;
@@ -14,9 +16,13 @@ public class AdministradorDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	protected Integer id;
+	@NotNull(message = "Nome é obrigatório")
 	protected String nome;
+	@NotNull(message = "CPF é obrigatório")
 	protected String cpf;
+	@NotNull(message = "Email é obrigatório")
 	protected String email;
+	@NotNull(message = "Senha é obrigatório")
 	protected String senha;
 	protected Set<Integer> perfis = new HashSet<>();
 	
