@@ -1,5 +1,8 @@
 package com.lobo.projetoRacerSpring.resources;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,4 +26,12 @@ public class AdministradorResource {
 		Administrador obj = service.findById(id);
 		return ResponseEntity.ok().body(new AdministradorDTO(obj));
 	}
+	
+	@GetMapping
+	public ResponseEntity<List<AdministradorDTO>> findAll(){
+		List<Administrador> list = service.findAll();
+		List<AdministradorDTO> listDTO = list.stream().map(obj -> new AdministradorDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDTO);
+	}
+	
 }
