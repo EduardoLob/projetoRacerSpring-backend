@@ -23,7 +23,7 @@ public class AdministradorService {
 	private AdministradorRepository repository;
 	@Autowired
 	private PessoaRepository pessoaRepository;
-	
+
 	public Administrador findById(Integer id) {
 		Optional<Administrador> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectnotFoundException("Não encontramos o ADM de ID: " + id));
@@ -39,7 +39,7 @@ public class AdministradorService {
 		Administrador newObj = new Administrador(objDTO);
 		return repository.save(newObj);
 	}
-	
+
 	public Administrador update(Integer id, @Valid AdministradorDTO objDTO) {
 		objDTO.setId(id);
 		Administrador oldObj = findById(id);
@@ -48,15 +48,20 @@ public class AdministradorService {
 		return repository.save(oldObj);
 	}
 
+	public void delete(Integer id) {
+		Administrador obj = findById(id);
+		repository.deleteById(id); 
+	}
+
 	private void validaPorCpfEEmail(AdministradorDTO objDTO) {
 		Optional<Pessoa> obj = pessoaRepository.findByCpf(objDTO.getCpf());
-		if(obj.isPresent() && obj.get().getId() != objDTO.getId()) {
+		if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
 			throw new DataIntegrityViolationException("CPF já está cadastrado em nosso sistema");
 		}
 		obj = pessoaRepository.findByEmail(objDTO.getEmail());
-		if(obj.isPresent() && obj.get().getId() != objDTO.getId()) {
+		if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
 			throw new DataIntegrityViolationException("Email já está cadastrado em nosso sistema");
 		}
 	}
-	
+
 }
