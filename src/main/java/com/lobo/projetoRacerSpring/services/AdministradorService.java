@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.lobo.projetoRacerSpring.domain.Administrador;
 import com.lobo.projetoRacerSpring.repositories.AdministradorRepository;
+import com.lobo.projetoRacerSpring.services.exceptions.ObjectnotFoundException;
 
 @Service
 public class AdministradorService {
@@ -16,6 +17,6 @@ public class AdministradorService {
 	
 	public Administrador findById(Integer id) {
 		Optional<Administrador> obj = repository.findById(id);
-		return obj.orElse(null);
+		return obj.orElseThrow(() -> new ObjectnotFoundException("Não encontramos o ADM de ID: " + id));
 	}
 }
