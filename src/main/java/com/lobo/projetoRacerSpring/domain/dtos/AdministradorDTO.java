@@ -25,6 +25,7 @@ public class AdministradorDTO implements Serializable {
 
 	public AdministradorDTO() {
 		super();
+		addPerfil(Perfil.USUARIO);
 	}
 
 	public AdministradorDTO(Administrador obj) {
@@ -36,6 +37,7 @@ public class AdministradorDTO implements Serializable {
 		this.senha = obj.getSenha();
 		this.perfis = obj.getPerfis().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
 		this.dataCriacao = obj.getDataCriacao();
+		addPerfil(Perfil.USUARIO);  
 	}
 
 	public Integer getId() {

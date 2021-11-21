@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lobo.projetoRacerSpring.domain.Administrador;
+import com.lobo.projetoRacerSpring.domain.dtos.AdministradorDTO;
 import com.lobo.projetoRacerSpring.repositories.AdministradorRepository;
 import com.lobo.projetoRacerSpring.services.exceptions.ObjectnotFoundException;
 
@@ -23,5 +24,11 @@ public class AdministradorService {
 
 	public List<Administrador> findAll() {
 		return repository.findAll();
+	}
+
+	public Administrador create(AdministradorDTO objDTO) {
+		objDTO.setId(null);
+		Administrador newObj = new Administrador(objDTO);
+		return repository.save(newObj);
 	}
 }
