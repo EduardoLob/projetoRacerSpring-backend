@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lobo.projetoRacerSpring.domain.Administrador;
+import com.lobo.projetoRacerSpring.domain.Pessoa;
 import com.lobo.projetoRacerSpring.domain.dtos.AdministradorDTO;
 import com.lobo.projetoRacerSpring.repositories.AdministradorRepository;
+import com.lobo.projetoRacerSpring.repositories.PessoaRepository;
+import com.lobo.projetoRacerSpring.services.exceptions.DataIntegrityViolationException;
 import com.lobo.projetoRacerSpring.services.exceptions.ObjectnotFoundException;
 
 @Service
@@ -16,6 +19,8 @@ public class AdministradorService {
 
 	@Autowired
 	private AdministradorRepository repository;
+	@Autowired
+	private PessoaRepository pessoaRepository;
 	
 	public Administrador findById(Integer id) {
 		Optional<Administrador> obj = repository.findById(id);
@@ -28,7 +33,20 @@ public class AdministradorService {
 
 	public Administrador create(AdministradorDTO objDTO) {
 		objDTO.setId(null);
+		validaPorCpfEEmail(objDTO);
 		Administrador newObj = new Administrador(objDTO);
 		return repository.save(newObj);
 	}
+
+	private void validaPorCpfEEmail(AdministradorDTO objDTO) {
+		Optional<Pessoa> obj = pessoaRepository.findByCpf(objDTO.getCpf());
+		if(obj.isPresent() && obj.get().getId() != objDTO.getId()) {
+			throw new DataIntegrityViolationException("CPF já está cadastrado em nosso sistema");
+		}
+		obj = pessoaRepository.findByEmail(objDTO.getEmail());
+		if(obj.isPresent() && obj.get().getId() != objDTO.getId()) {
+			throw new DataIntegrityViolationException("Email já está cadastrado em nosso sistema");
+		}
+	}
+	
 }
