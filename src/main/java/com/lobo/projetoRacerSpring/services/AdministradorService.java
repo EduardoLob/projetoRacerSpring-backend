@@ -3,6 +3,8 @@ package com.lobo.projetoRacerSpring.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +38,14 @@ public class AdministradorService {
 		validaPorCpfEEmail(objDTO);
 		Administrador newObj = new Administrador(objDTO);
 		return repository.save(newObj);
+	}
+	
+	public Administrador update(Integer id, @Valid AdministradorDTO objDTO) {
+		objDTO.setId(id);
+		Administrador oldObj = findById(id);
+		validaPorCpfEEmail(objDTO);
+		oldObj = new Administrador(objDTO);
+		return repository.save(oldObj);
 	}
 
 	private void validaPorCpfEEmail(AdministradorDTO objDTO) {
