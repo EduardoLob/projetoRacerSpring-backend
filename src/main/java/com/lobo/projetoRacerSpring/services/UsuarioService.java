@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.lobo.projetoRacerSpring.domain.Usuario;
@@ -23,6 +24,8 @@ public class UsuarioService {
 	private UsuarioRepository repository;
 	@Autowired
 	private PessoaRepository pessoaRepository;
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 
 	public Usuario findById(Integer id) {
 		Optional<Usuario> obj = repository.findById(id);
@@ -35,6 +38,7 @@ public class UsuarioService {
 
 	public Usuario create(UsuarioDTO objDTO) {
 		objDTO.setId(null);
+		objDTO.setSenha(encoder.encode(objDTO.getSenha()));
 		validaPorCpfEEmail(objDTO);
 		Usuario newObj = new Usuario(objDTO);
 		return repository.save(newObj);
